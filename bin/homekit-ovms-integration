@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+"use strict";
+
+process.title = "homekit-ovms-integration";
+
+require("../lib/index.js");
