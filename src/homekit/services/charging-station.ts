@@ -5,11 +5,11 @@ import { CurrentPower } from '../characteristics/power'
 /**
  * Custom Service "Electric Vehicle Charging Station"
  */
-export class ElectricVehicleChargingStation extends Service {
+export class ElectricVehicleChargingStationService extends Service {
     static UUID: string = "00000004-0000-1000-8000-0036AC324978"
 
     constructor(displayName: string, subtype?: string) {
-        super(displayName, ElectricVehicleChargingStation.UUID, subtype)
+        super(displayName, ElectricVehicleChargingStationService.UUID, subtype)
 
         // Required Characteristics
         this.addCharacteristic(Characteristic.BatteryLevel);

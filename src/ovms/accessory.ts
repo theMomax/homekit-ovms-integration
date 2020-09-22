@@ -1,7 +1,7 @@
 import { Accessory, Service, Characteristic, uuid} from "hap-nodejs";
 import { OVMSAPI } from './api'
 import { Binding } from './util/binding'
-import { ElectricVehicleChargingStation } from '../homekit/services/charging-station'
+import { ElectricVehicleChargingStationService } from '../homekit/services/charging-station'
 import { EstimatedRange } from '../homekit/characteristics/range'
 import { CurrentPower } from '../homekit/characteristics/power'
 
@@ -34,7 +34,7 @@ export class OVMSIntegration extends Accessory {
 
 }
 
-class ChargingStationIntegration extends ElectricVehicleChargingStation {
+class ChargingStationIntegration extends ElectricVehicleChargingStationService {
 
     constructor(api: OVMSAPI, displayName: string = 'Charging Station') {
         super(displayName)
