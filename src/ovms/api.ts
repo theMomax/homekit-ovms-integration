@@ -45,11 +45,12 @@ export class OVMSAPI {
         if (value === undefined) {
             throw new Error('could not read ' + identifier + ' using command ' + command)
         }
+        info('successfully retrieved ' + identifier + ' from command ' + command + ': ' + value)
         return value
     };
 
     public async isActive(): Promise<Boolean> {
-        if (new Date().getTime() - this.lastUpdated.getTime() < 1000 * program.cacheInvalidationDuration) {
+        if (new Date().getTime() - this.lastUpdated.getTime() < program.cacheInvalidationDuration) {
             return true
         }
         try {
@@ -147,7 +148,8 @@ class Cache<T> {
     }
 
     public async read(): Promise<T> {
-        if (new Date().getTime() - this.lastUpdated.getTime() < 1000 * program.cacheInvalidationDuration) {
+        if (new Date().getTime() - this.lastUpdated.getTime() < program.cacheInvalidationDuration) {
+            info('used cache instead of calling ' + this.get.toString())
             return this.value;
         }
         const v = await this.get();

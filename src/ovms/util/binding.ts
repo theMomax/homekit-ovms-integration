@@ -1,5 +1,9 @@
 import { Characteristic } from "hap-nodejs";
 
+var debug = require('debug')('ovms:binding:debug')
+var info = require('debug')('ovms:binding:info')
+var warn = require('debug')('ovms:binding:warn')
+var error = require('debug')('ovms:binding:error')
 
 export class Binding<T> {
 
@@ -13,7 +17,7 @@ export class Binding<T> {
 
     private active: boolean
 
-    constructor(characteristic: Characteristic, get: () => Promise<T>, onError: (error: Error) => void, interval: number = 1000) {
+    constructor(characteristic: Characteristic, get: () => Promise<T>, onError: (error: Error) => void, interval: number = 60000) {
         this.characteristic = characteristic
         this.get = get
         this.onError = onError
@@ -21,6 +25,7 @@ export class Binding<T> {
     }
 
     public async bind(): Promise<void> {
+        info('binding of characteristic ' + this.characteristic.displayName + ' is now enabled')
         this.active = true
         do {
             const start = new Date()
@@ -28,19 +33,25 @@ export class Binding<T> {
             await this.update()
 
             if (this.interval) {
-                await delay(Math.max(0, this.interval - (new Date().getTime() - start.getTime())))
+                const d = Math.max(0, this.interval - (new Date().getTime() - start.getTime()))
+                debug('waiting for ' + d + 'ms until next update on characteristic ' + this.characteristic.displayName)
+                await delay(d)
             }
         } while (this.active)
     }
 
     public async pause(): Promise<void> {
+        info('binding of characteristic ' + this.characteristic.displayName + ' is now disabled')
         this.active = false
     }
 
     public async update(): Promise<void> {
         try {
-            this.characteristic.updateValue((await this.get()) as any)
+            const nv = await this.get()
+            info('update characteristic ' + this.characteristic.displayName + ': ' + nv)
+            this.characteristic.updateValue(nv as any)
         } catch (err) {
+            error(err)
             this.onError(err)
         }
     }

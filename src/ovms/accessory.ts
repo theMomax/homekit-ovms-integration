@@ -80,7 +80,7 @@ class ChargingStationIntegration extends ElectricVehicleChargingStationService {
         } , log, program.pollInterval).bind()
 
         new Binding(this.getCharacteristic(CurrentPower), async () => {
-            return Number((await api.power()).valueOf() * 1000)
+            return Number((await api.power()).valueOf() * (-1000))
         } , log, program.pollInterval).bind()
     }
 }

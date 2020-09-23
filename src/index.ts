@@ -7,7 +7,7 @@ import init from './init'
 
 
 program
-    .option('-s, --storage-path <path>', "path to HAP-nodejs' persistence folder", './persis')
+    .option('-s, --storage-path <path>', "path to HAP-nodejs' persistence folder", './persist')
 
 program.parse(process.argv)
 
